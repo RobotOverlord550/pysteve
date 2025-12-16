@@ -2,7 +2,8 @@ import pygame
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((1280, 720))
+    SCREEN_DIMENSIONS = (1280, 720)
+    screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
     clock = pygame.time.Clock()
     running = True
 
