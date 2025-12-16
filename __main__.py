@@ -12,7 +12,7 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill("purple")
+        screen.fill("black")
 
 
         pygame.display.flip()
