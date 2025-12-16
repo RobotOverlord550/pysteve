@@ -1,15 +1,14 @@
-import pygame, oned_as_twod
+import pygame, arr1d_as_2d, const
 from numpy import array as nparray
 
-SCREEN_DIMENSIONS = (1280, 720)
-ASSETS_DIR = "assets"
 
+CONSTANTS = const.Constants()
 
 
 if __name__ == "__main__":
     pygame.init()
 
-    screen = pygame.display.set_mode(SCREEN_DIMENSIONS)
+    screen = pygame.display.set_mode(CONSTANTS.SCREEN_DIMENSIONS)
     clock = pygame.time.Clock()
     running = True
 
