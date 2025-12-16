@@ -1,7 +1,7 @@
 # TODO document
 
 
-import arr1d_as_2d, logging, pygame
+import arr1d_as_2d, logging, pygame, os
 
 
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,7 @@ class Constants:
     
     def __init__(self):
         self.SCREEN_DIMENSIONS = (1280, 720)
-        self.ASSETS_DIR = "assets"
+        self.ASSETS_DIR = os.path.join(os.path.dirname(__file__), "assets")
         
         self.TILESET_FILE_NAME = "tileset"
         self.TILESET_FILE_EXT = ".png"
