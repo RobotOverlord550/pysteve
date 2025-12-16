@@ -2,6 +2,13 @@
     "recommendations": [
         "ZainChen.json",
         "ms-python.python",
-        "gruntfuggly.todo-tree"
+        "ms-python.autopep8",
+        "esbenp.prettier-vscode",
+        "yzhang.markdown-all-in-one",
+        "tushortz.python-extended-snippets",
+        "kevinrose.vsc-python-indent",
+        "mgesbert.python-path",
+        "njqdev.vscode-python-typehint",
+        "redhat.vscode-xml"
     ]
 }
