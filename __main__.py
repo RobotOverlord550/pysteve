@@ -1,3 +1,5 @@
+# TODO document
+
 import pygame, arr1d_as_2d, const
 from numpy import array as nparray
 

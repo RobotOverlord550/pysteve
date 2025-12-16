@@ -1,3 +1,5 @@
+# TODO document
+
 import pygame
 import arr1d_as_2d
 
