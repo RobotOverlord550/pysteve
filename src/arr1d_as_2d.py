@@ -25,6 +25,8 @@ def create_1d_as_2d_ls(width: int, height: int) -> list:
     ls = []
     ls.append(width)
     ls.append(height)
+    for i in range(width * height):
+        ls.append(None)    
     return ls
 
 

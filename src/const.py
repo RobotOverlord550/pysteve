@@ -1,7 +1,11 @@
 # TODO document
 
-import pygame
-import arr1d_as_2d
+
+import pygame, arr1d_as_2d, logging
+
+
+logging.basicConfig(level=logging.INFO)
+
 
 class Constants:
     def load_tiles(self):
@@ -19,14 +23,14 @@ class Constants:
         self.SCREEN_DIMENSIONS = (1280, 720)
         self.ASSETS_DIR = "assets"
         
-        self.TILESET_FILE_NAME: str
+        self.TILESET_FILE_NAME = "tileset"
         self.TILESET_FILE_EXT = ".png"
         self.TILESET: pygame.Surface = pygame.image.load(
             "" + self.ASSETS_DIR + "/" + self.TILESET_FILE_NAME + self.TILESET_FILE_EXT
-            ).convert_alpha()
+            )
         self.TILE_PXL_SIZE = 4
-        tileset_width_pxl = self.TILESET.get_size().x
-        tileset_height_pxl = self.TILESET.get_size().y
+        tileset_width_pxl = self.TILESET.get_size()[0]
+        tileset_height_pxl = self.TILESET.get_size()[1]
         self.TILES = arr1d_as_2d.create_1d_as_2d_ls(tileset_width_pxl, 
                                                     tileset_height_pxl)
          
@@ -34,9 +38,7 @@ class Constants:
             for x in range(0, tileset_width_pxl, self.TILE_PXL_SIZE):
                 self.TILES = arr1d_as_2d.set_1d_as_2d_ls(
                     self.TILES, 
-                    self.TILESET.subsurface(
-                        (x, y), 
-                        self.TILE_PXL_SIZE, 
-                        self.TILE_PXL_SIZE))
+                    self.TILESET.subsurface((x, y), (self.TILE_PXL_SIZE, 
+                                                     self.TILE_PXL_SIZE)), y, x)
                 
         self.WORLD_DIM = (512, 256)
