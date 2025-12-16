@@ -1,7 +1,7 @@
 # TODO document
 
 
-import pygame, arr1d_as_2d, logging
+import arr1d_as_2d, logging, pygame
 
 
 logging.basicConfig(level=logging.INFO)
