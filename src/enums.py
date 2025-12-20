@@ -1,5 +1,5 @@
 from enum import Enum
 
 
-class BlockIndex(Enum):
+class TileIndex(Enum):
     GRASS = 1

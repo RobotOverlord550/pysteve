@@ -6,6 +6,7 @@ the main game loop. The game continues until the user closes the window.
 
 import pygame
 import const
+import cam
 
 
 CONSTANTS = const.Constants()
@@ -16,6 +17,7 @@ if __name__ == "__main__":
 
     screen = pygame.display.set_mode(CONSTANTS.SCREEN_DIMENSIONS)
     clock = pygame.time.Clock()
+    main_camera = cam.Camera(CONSTANTS.SCREEN_DIMENSIONS[0], CONSTANTS.SCREEN_DIMENSIONS[1])
     running = True
 
     while running:
