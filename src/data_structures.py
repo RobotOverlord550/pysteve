@@ -46,7 +46,7 @@ class ls_1d_as_2d:
 
 
 
-class Test1DArrayAs2d(AbstractTest):
+class Test(AbstractTest):
     def test_1d_as_2d_np(self):
         test_np = nparr_1d_as_2d.create_1d_as_2d_np(1000, 1000)
         self.assertIsNotNone(test_np)
