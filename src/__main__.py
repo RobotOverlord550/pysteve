@@ -1,17 +1,28 @@
+import tileset
 import pygame
-import const
-import cam
+import directory
+from enum import Enum
 
 
-CONSTANTS = const.Constants()
+WINDOW_DIMENSIONS = (1280, 720)
+ASSETS_FOLDER_NAME = "assets"
+TILESET_FILE_NAME = "tileset"
+TILESET_FILE_EXT = ".png"
 
+
+class TileIndex(Enum):
+    AIR = 0
+    GRASS = 1
+
+
+assets_folder = directory.get_global_path(ASSETS_FOLDER_NAME)
+tileset = tileset.Tileset(TILESET_FILE_NAME, TILESET_FILE_EXT, assets_folder, 4)
 
 if __name__ == "__main__":
     pygame.init()
 
-    screen = pygame.display.set_mode(CONSTANTS.SCREEN_DIMENSIONS)
+    screen = pygame.display.set_mode(WINDOW_DIMENSIONS)
     clock = pygame.time.Clock()
-    main_camera = cam.Camera(CONSTANTS.SCREEN_DIMENSIONS[0], CONSTANTS.SCREEN_DIMENSIONS[1])
     running = True
 
     while running:
