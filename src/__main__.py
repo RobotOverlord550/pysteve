@@ -1,9 +1,3 @@
-"""Main entry point for the Terraria clone game.
-
-This module initializes the Pygame engine, creates the game window, and runs
-the main game loop. The game continues until the user closes the window.
-"""
-
 import pygame
 import const
 import cam

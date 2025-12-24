@@ -2,7 +2,7 @@ from numpy import Vec2D
 from world import World
 from pygame import Screen
 from const import Constants
-import arr1d_as_2d
+import data_structures
 
 
 class Camera():
@@ -19,7 +19,7 @@ class Camera():
         for x in range(block_width):
             for y in range(block_height):
                 scan_position: Vec2D = self.position + Vec2D(x, y)
-                scan_tile = arr1d_as_2d.get_1d_as_2d_np(world.world_tilemap, 
+                scan_tile = data_structures.get_1d_as_2d_np(world.world_tilemap, 
                                                         scan_position.x, scan_position.y)
                 if scan_tile != None:
                     tile = const.TILESET[scan_tile]
