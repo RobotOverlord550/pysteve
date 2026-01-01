@@ -1,5 +1,4 @@
 import numpy as np
-from opensimplex import OpenSimplex
 
 
 def create(
@@ -50,4 +49,15 @@ def fill(
     """    
     tilemap[:, :] = tile_index
     
-    
+
+def fill_subsection(
+    tilemap: int,
+    tile_index: int,
+    subsection_tl_row: int,
+    subsection_tl_col: int,
+    subsection_br_row: int,
+    subsection_br_col: int
+):
+    for row in range(subsection_tl_row, subsection_br_row):
+        for col in range(subsection_tl_col, subsection_br_col):
+            tilemap[row, col] = tile_index

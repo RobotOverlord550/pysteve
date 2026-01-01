@@ -1,3 +1,4 @@
+import generalmath
 import numpy as np
 from opensimplex import OpenSimplex
 
@@ -12,6 +13,59 @@ def new_simplex(seed: int) -> OpenSimplex:
     """    
     opensimplex = OpenSimplex(seed=seed)
     return opensimplex
+
+
+def generate_noise1(
+    grid: np.ndarray,
+    max_row: int,
+    min_row: int,
+    frequency: float,
+    amplitude: float,
+    lacunarity: float,
+    persistence: float,
+    octaves: int,
+    simplex: OpenSimplex,
+    new_val: int,
+):
+    f = frequency
+    a = amplitude
+    max_value = 0.0
+    height, width = grid.shape
+    height = generalmath.clamp(height, 0, max_row - min_row)
+    noise_arr = np.zeros(width)
+    
+    for _ in range(octaves):
+        max_value += amplitude
+        _noise1_add_octave(
+            frequency=f, 
+            amplitude=a, 
+            start_arr=noise_arr, 
+            simplex=simplex
+        )
+        f *= lacunarity
+        a *= persistence
+    
+    for row in range(height):
+        for col in range(width):
+            norm_value = (noise_arr[col] + max_value) / (2 * max_value)
+            norm_row = row / height
+            if norm_row < norm_value:
+                grid[row + min_row, col] = new_val
+
+
+def _noise1_add_octave(
+    frequency: float,
+    amplitude: float,
+    start_arr: np.ndarray,
+    simplex: OpenSimplex,
+):
+    noise_arr = start_arr
+    f = frequency
+    a = amplitude
+    
+    for col in range(noise_arr.size):
+        noise_value = simplex.noise2(x=col * f, y=0)
+        noise_arr[col] += noise_value * a
 
 
 def generate_noise2(

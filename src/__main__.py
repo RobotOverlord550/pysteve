@@ -1,17 +1,17 @@
 # internal modules
 import tileset, tilemap, world, directory, noise, generalmath
 # external libraries
-import numpy, pygame
+import pygame, configparser, os
 from enum import Enum
 
 
 # constants
-WINDOW_DIMENSIONS = (720, 720)
+SEED = 42
 ASSETS_FOLDER_NAME = "assets"
 TILESET_FILE_NAME = "tileset"
 TILESET_FILE_EXT = ".png"
 TILESIZE_PX = 4
-WORLD_DIMENSIONS = (512, 512)
+WORLD_DIMENSIONS = (256, 256)
 BACKGROUND_COLOR = (135, 206, 235)
 
 
@@ -21,8 +21,42 @@ class TileIndex(Enum):
     GRASS = 1
     
 
-# main
+def create_config():
+    config = configparser.ConfigParser()
+    
+    config['video'] = {
+        'window-height': 720,
+        'window-width': 720
+    }
+    
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
+
+def read_config() -> dict:
+    config = configparser.ConfigParser()
+    
+    config.read('config.ini')
+    
+    window_height = config.getint('video', 'window-height')
+    window_width = config.getint('video', 'window-width')
+    
+    config_values = {
+        'window_height': window_height,
+        'window_width': window_width
+    }
+    
+    return config_values
+    
+
 if __name__ == "__main__":
+    # initialize config
+    if not os.path.exists('config.ini'):
+        create_config()
+    config_values = read_config()
+    print(config_values['window_height'])
+    print(config_values['window_width'])
+    
     # initialize pygame
     pygame.init()
     print("pygame initialized")
@@ -34,7 +68,10 @@ if __name__ == "__main__":
     # tileset and tilemap setup
     g_tileset = tileset.create(TILESET_FILE_NAME, TILESET_FILE_EXT, assets_folder, TILESIZE_PX)
     print(f"initialized tileset: {str(g_tileset)}")
-    g_tilemap = tilemap.create(height=WORLD_DIMENSIONS[1], width=WORLD_DIMENSIONS[0])
+    g_tilemap = tilemap.create(
+        WORLD_DIMENSIONS[0],
+        WORLD_DIMENSIONS[1]
+    )
     print(f"initialized tilemap: {str(g_tilemap)}")
     tilemap.fill(g_tilemap, TileIndex.GRASS.value)
     print(f"filled tilemap with {str(TileIndex.GRASS.value)}")
@@ -45,15 +82,35 @@ if __name__ == "__main__":
     noise.generate_noise2(
         grid=g_tilemap,
         simplex=simplex,
-        octaves=4,
-        frequency=0.1,
+        octaves=2,
+        frequency=0.2,
         amplitude=0.5,
         lacunarity=2.0,
         persistance=0.5,
-        threshold=0.55,
+        threshold=0.56,
         new_val=TileIndex.AIR.value,
     )
     print(f"generated caves onto tilemap: {str(g_tilemap)}")
+    noise.generate_noise1(
+        grid=g_tilemap,
+        max_row=64,
+        min_row=32,
+        simplex=simplex,
+        octaves=4,
+        frequency=0.2,
+        amplitude=0.5,
+        lacunarity=2.0,
+        persistence=0.5,
+        new_val=TileIndex.AIR.value
+    )
+    tilemap.fill_subsection(
+        tilemap=g_tilemap, 
+        subsection_tl_col=0, 
+        subsection_tl_row=0, 
+        subsection_br_col=g_tilemap.shape[0], 
+        subsection_br_row=32, 
+        tile_index=TileIndex.AIR.value
+    )
     
     # initialize world and draw tiles onto world
     g_world = world.create(
@@ -71,7 +128,10 @@ if __name__ == "__main__":
     print(f"drew tilemap onto world: {str(g_world)}")
 
     # pygame initializations
-    screen = pygame.display.set_mode(WINDOW_DIMENSIONS)
+    screen = pygame.display.set_mode((
+        config_values['window_width'], 
+        config_values['window_height']
+    ))
     print(f"initialized main screen: {str(screen)}")
     clock = pygame.time.Clock()
     print(f"initialized game clock as {str(clock)}")
@@ -99,10 +159,7 @@ if __name__ == "__main__":
 
         # sets initial view rect size
         world_height, world_width = g_world.get_size()
-        if world_height > world_width:
-            window_rect = pygame.Rect(0, 0, world_height, world_height)
-        else:
-            window_rect = pygame.Rect(0, 0, world_width, world_width)
+        window_rect = pygame.Rect(0, 0, world_height, world_height)
             
         # Zoom in/out
         if keys[pygame.K_z]:
@@ -124,7 +181,7 @@ if __name__ == "__main__":
                 move_y += 10 * zoom
 
         # set size of view rect based on input
-        window_rect.width = g_world.get_width() * zoom
+        window_rect.width = g_world.get_height() * zoom
         window_rect.height = g_world.get_height() * zoom
 
         # set location of view rect based on input
@@ -142,7 +199,14 @@ if __name__ == "__main__":
         window_rect.y = move_y
 
         # scale view rect to window
-        pygame.transform.scale(g_world.subsurface(window_rect), WINDOW_DIMENSIONS, screen)
+        pygame.transform.scale(
+            g_world.subsurface(window_rect), 
+            (
+                config_values['window_width'], 
+                config_values['window_height']
+            ), 
+            screen
+        )
 
         # reset display
         pygame.display.flip()
