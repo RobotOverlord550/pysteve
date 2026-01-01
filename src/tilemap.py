@@ -6,9 +6,18 @@ def create(
         height: int,
         width: int
     ) -> np.ndarray:
-    arr = np.array([[0 for _ in range(height)] for _ in range(width)])
+    """create new tilemap
 
-    print("Created tilemap of size:", arr.shape)
+    Args:
+        height (int): tilemap height
+        width (int): tilemap width
+
+    Returns:
+        np.ndarray: tilemap represented as a numpy ndarray
+    """
+    # set 2d array to hold tilemap
+    arr = np.array([[0 for _ in range(height)] for _ in range(width)])
+    
     return arr
 
 
@@ -17,19 +26,28 @@ def set_tile(
         row: int,
         col: int,
         tile_index: int,
-        verbose: bool = False
     ):
+    """change the tile at the specified row and collumn
+
+    Args:
+        tilemap (_type_): tilemap to edit
+        row (int): row to use
+        col (int): collumn to use
+        tile_index (int): new tile
+    """
     tilemap[row, col] = tile_index
-    if verbose:
-        print(f"Set tile at ({row}, {col}) to index {tile_index}")
 
 
 def fill(
         tilemap,
         tile_index: int
     ):
-    # Vectorized fill: assign the tile_index to the entire array at once.
+    """fills tilemap with same tile.  usefull for initialization 
+
+    Args:
+        tilemap (_type_): _description_
+        tile_index (int): _description_
+    """    
     tilemap[:, :] = tile_index
-    print(f"Filled tilemap with tile index {tile_index}")
     
     

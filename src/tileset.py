@@ -5,7 +5,19 @@ def create(
         file_name: str, 
         file_ext: str, 
         assets_dir_global: str, 
-        tile_size_p: int) -> list:
+        tile_size_p: int
+    ) -> list:
+    """Create a new tileset by preloading from tileset asset
+
+    Args:
+        file_name (str): filename of tileset asset
+        file_ext (str): extension of tileset asset
+        assets_dir_global (str): path to assets directory
+        tile_size_p (int): size of the tiles in pixels
+
+    Returns:
+        list: _description_
+    """    
     tileset: pygame.Surface = pygame.image.load(
         "" + assets_dir_global + "/" + file_name + file_ext
     )
@@ -34,5 +46,4 @@ def create(
                 )
             )
             
-    print("Created tileset with", len(tiles), "tiles")
     return tiles
