@@ -4,7 +4,7 @@
 - __Contributing__: WORKING ON IT!
 - __Bug Reports__: WORKING ON IT!
 ## Description
-A little python project I'm making to practice noise generation and other programming concepts related to destructible environments.  Right now the project has no releases.  If you want to see something, download the source code and run the __main__.py script.
+A little python project I'm making to practice noise generation and other programming concepts related to destructible environments.  Right now the project has no releases.  If you want to see something, download the source code and run the `__main__.py` script.
 ## Packages
 - __numpy__: 2.3.5
 - __opensimplex__: 0.4.5.1
