@@ -19,7 +19,7 @@ class TestApplyNoise(unittest.TestCase):
         below = 2
         above = 1
 
-        tm = tilemap.apply_noise(
+        tm = tilemap.generate_caves(
             tilemap=tm,
             scale=20.0,
             octaves=3,

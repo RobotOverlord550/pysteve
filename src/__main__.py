@@ -1,4 +1,4 @@
-import tileset, tilemap, world, pygame, directory
+import tileset, tilemap, world, pygame, directory, numpy
 from enum import Enum
 
 
@@ -6,12 +6,12 @@ def clamp(x, minimum, maximum):
     return max(minimum, min(x, maximum))
 
 
-WINDOW_DIMENSIONS = (720, 720)
+WINDOW_DIMENSIONS = (128, 1024)
 ASSETS_FOLDER_NAME = "assets"
 TILESET_FILE_NAME = "tileset"
 TILESET_FILE_EXT = ".png"
 TILESIZE_PX = 4
-WORLD_DIMENSIONS = (512, 512)
+WORLD_DIMENSIONS = (128, 1024)
 BACKGROUND_COLOR = (135, 206, 235)
 
 
@@ -23,18 +23,22 @@ class TileIndex(Enum):
 if __name__ == "__main__":
     pygame.init()
     
+    rng = numpy.random.default_rng()
+    
     assets_folder = directory.get_global_path(ASSETS_FOLDER_NAME)
     g_tileset = tileset.create(TILESET_FILE_NAME, TILESET_FILE_EXT, assets_folder, TILESIZE_PX)
-    g_tilemap = tilemap.create(WORLD_DIMENSIONS[0], WORLD_DIMENSIONS[1])
+    g_tilemap = tilemap.create(WORLD_DIMENSIONS[1], WORLD_DIMENSIONS[0])
     tilemap.fill(g_tilemap, TileIndex.GRASS.value)
-    perlin = tilemap.init_perlin(seed=42)
-    tilemap.apply_noise(
+    simplex = tilemap.new_simplex(seed=42)
+    tilemap.generate_caves(
         tilemap=g_tilemap,
-        opensimplex=perlin,
-        octaves=10,
-        scale=10,
-        min_row=64,
-        max_row=448,
+        simplex=simplex,
+        octaves=4,
+        frequency=.1,
+        amplitude=1,
+        lacunarity=2.0,
+        persistance=0.5,
+        below_value=0.5,
         below_index=TileIndex.AIR.value,
     )
     g_world = world.create(tile_size=TILESIZE_PX, world_dimensions=WORLD_DIMENSIONS)
