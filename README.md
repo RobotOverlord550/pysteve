@@ -1,4 +1,4 @@
-# Project Py Steve
+# Project PySteve
 ## A little block game with big dreams
 - __Website__: WORKING ON IT!
 - __Contributing__: WORKING ON IT!
