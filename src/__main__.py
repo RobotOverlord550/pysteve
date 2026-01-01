@@ -1,4 +1,4 @@
-import tileset, tilemap, world, math, pygame, directory
+import tileset, tilemap, world, pygame, directory
 from enum import Enum
 
 
@@ -52,8 +52,8 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     running = True
     zoom = 1.0
-    move_x = 0.00
-    move_y = 0.00
+    move_x = 0.0
+    move_y = 0.0
 
     while running:
         for event in pygame.event.get():
