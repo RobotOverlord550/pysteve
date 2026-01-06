@@ -27,6 +27,20 @@ def generate_noise1(
     simplex: OpenSimplex,
     new_val: int,
 ):
+    """generates 1d noise on a 2d plane.  Values above generated noise value are replaced
+
+    Args:
+        grid (np.ndarray): starting 2d array
+        max_row: maximum row to apply noise to
+        minimum_row: minimum row to apply noise to
+        frequency (float): frequency of noise algorithm (0-1)
+        amplitude (float): amplitude of noise algorithm (0-1)
+        lacunarity (float): lacunarity of noise algorithm (0-1)
+        persistance (float): persistence of noise algorithm (0-1)
+        octaves (int): octaves of noise algorithm (>0)
+        simplex (OpenSimplex): initialized simplex object (use new_simplex())
+        new_val (int): value to change grid cells to when the cells are greater than the threshold
+    """    
     f = frequency
     a = amplitude
     max_value = 0.0
@@ -59,6 +73,14 @@ def _noise1_add_octave(
     start_arr: np.ndarray,
     simplex: OpenSimplex,
 ):
+    """helper function for generate_noise_1() to apply octaves
+
+    Args:
+        frequency (float): frequency of octave
+        amplitude (float): amplitude of octave
+        start_arr (np.ndarray): array to apply octave too
+        simplex (OpenSimplex): initialized simplex object to use
+    """    
     noise_arr = start_arr
     f = frequency
     a = amplitude

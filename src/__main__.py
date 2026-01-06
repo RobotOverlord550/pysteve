@@ -10,7 +10,7 @@ SEED = 42
 ASSETS_FOLDER_NAME = "assets"
 TILESET_FILE_NAME = "tileset"
 TILESET_FILE_EXT = ".png"
-TILESIZE_PX = 4
+TILESIZE_PX = 8
 WORLD_DIMENSIONS = (256, 256)
 BACKGROUND_COLOR = (135, 206, 235)
 
@@ -22,6 +22,8 @@ class TileIndex(Enum):
     
 
 def create_config():
+    """create a config file to persistently store settings in
+    """    
     config = configparser.ConfigParser()
     
     config['video'] = {
@@ -34,6 +36,11 @@ def create_config():
 
 
 def read_config() -> dict:
+    """read the current config file
+
+    Returns:
+        dict: dictionary of config values
+    """    
     config = configparser.ConfigParser()
     
     config.read('config.ini')
