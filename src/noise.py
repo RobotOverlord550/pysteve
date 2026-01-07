@@ -40,7 +40,8 @@ def generate_noise1(
         octaves (int): octaves of noise algorithm (>0)
         simplex (OpenSimplex): initialized simplex object (use new_simplex())
         new_val (int): value to change grid cells to when the cells are greater than the threshold
-    """    
+    """
+    # set variables with parameters
     f = frequency
     a = amplitude
     max_value = 0.0
@@ -48,6 +49,7 @@ def generate_noise1(
     height = generalmath.clamp(height, 0, max_row - min_row)
     noise_arr = np.zeros(width)
     
+    # runs noise algorithm for set number of Octaves
     for _ in range(octaves):
         max_value += amplitude
         _noise1_add_octave(
@@ -59,6 +61,7 @@ def generate_noise1(
         f *= lacunarity
         a *= persistence
     
+    # normalize calculated values and set values in grid that are above the threshold to the new value
     for row in range(height):
         for col in range(width):
             norm_value = (noise_arr[col] + max_value) / (2 * max_value)

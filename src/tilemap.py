@@ -58,6 +58,16 @@ def fill_subsection(
     subsection_br_row: int,
     subsection_br_col: int
 ):
+    """fills a subsection of the tilemap using position parameters
+
+    Args:
+        tilemap (int): tilemap to change
+        tile_index (int): tile index to set subsection to
+        subsection_tl_row (int): top left row of subsection
+        subsection_tl_col (int): top left collumn of subsection
+        subsection_br_row (int): bottom right row of subsection
+        subsection_br_col (int): bottom right collumn of subsection
+    """    
     for row in range(subsection_tl_row, subsection_br_row):
         for col in range(subsection_tl_col, subsection_br_col):
             tilemap[row, col] = tile_index
