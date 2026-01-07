@@ -1,16 +1,16 @@
-import os
+import sys
+from pathlib import Path
 
 
-def get_global_path(local_path: str) -> str:
-    """sets the global path of the local path
+def resource_path(relative_path: str) -> Path:
+    """gets the resource path of the local path
 
     Args:
         local_path (str): path relative to this file
 
     Returns:
-        str: global file path
+        str: resource file path
     """
-    return os.path.join(
-        os.path.dirname(__file__), 
-        local_path
-    )
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / relative_path
+    return Path(__file__).parent / relative_path

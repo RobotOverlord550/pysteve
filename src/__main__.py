@@ -1,13 +1,15 @@
-# internal modules
 import tileset, tilemap, world, directory, noise, generalmath
-# external libraries
 import pygame, configparser, os
+from pathlib import Path
 from enum import Enum
 
 
 # constants
 SEED = 42
 ASSETS_FOLDER_NAME = "assets"
+SETTINGS_FOLDER_NAME = "settings"
+CONFIG_FILE_NAME = "config"
+CONFIG_FILE_EXTENSION = ".ini"
 TILESET_FILE_NAME = "tileset"
 TILESET_FILE_EXT = ".png"
 TILESIZE_PX = 8
@@ -21,7 +23,8 @@ class TileIndex(Enum):
     GRASS = 1
     
 
-def create_config():
+
+def create_config(config_file_path: Path):
     """create a config file to persistently store settings in
     """    
     config = configparser.ConfigParser()
@@ -31,11 +34,11 @@ def create_config():
         'window-width': 720
     }
     
-    with open('config.ini', 'w') as configfile:
+    with open(config_file_path, 'w') as configfile:
         config.write(configfile)
 
 
-def read_config() -> dict:
+def read_config(config_file_path: Path) -> dict:
     """read the current config file
 
     Returns:
@@ -43,7 +46,7 @@ def read_config() -> dict:
     """    
     config = configparser.ConfigParser()
     
-    config.read('config.ini')
+    config.read(config_file_path)
     
     window_height = config.getint('video', 'window-height')
     window_width = config.getint('video', 'window-width')
@@ -57,23 +60,25 @@ def read_config() -> dict:
     
 
 if __name__ == "__main__":
-    # initialize config
-    if not os.path.exists('config.ini'):
-        create_config()
-    config_values = read_config()
-    print(config_values['window_height'])
-    print(config_values['window_width'])
-    
+    #___Initialization Phase___
     # initialize pygame
     pygame.init()
     print("pygame initialized")
     
-    # assets directory path
-    assets_folder = directory.get_global_path(ASSETS_FOLDER_NAME)
-    print(f"set assets directory: {str(assets_folder)}")
+    # tileset resource path
+    tileset_resource_path = directory.resource_path(ASSETS_FOLDER_NAME + "/" + TILESET_FILE_NAME + TILESET_FILE_EXT)
+    print(f"set tileset filepath: {str(tileset_resource_path)}")
+    
+    # config file
+    config_file_path = directory.resource_path("" + SETTINGS_FOLDER_NAME + "/" + CONFIG_FILE_NAME + CONFIG_FILE_EXTENSION)
+    
+    # initialize config
+    config_values = read_config(config_file_path=config_file_path)
+    print(config_values['window_height'])
+    print(config_values['window_width'])
     
     # tileset and tilemap setup
-    g_tileset = tileset.create(TILESET_FILE_NAME, TILESET_FILE_EXT, assets_folder, TILESIZE_PX)
+    g_tileset = tileset.create(TILESET_FILE_NAME, TILESET_FILE_EXT, tileset_resource_path, TILESIZE_PX)
     print(f"initialized tileset: {str(g_tileset)}")
     g_tilemap = tilemap.create(
         WORLD_DIMENSIONS[0],
@@ -149,6 +154,7 @@ if __name__ == "__main__":
     move_x = 0.0
     move_y = 0.0
 
+    #___Game Loop Phase___
     # main game loop
     while running:
         # event handling
@@ -221,6 +227,7 @@ if __name__ == "__main__":
         # clock stuff
         clock.tick(60)
 
+    #___Game End Phase___
     # send a quit event when loop is ended
     print("quiting")
     pygame.quit()

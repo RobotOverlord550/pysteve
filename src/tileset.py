@@ -4,7 +4,7 @@ import pygame
 def create(
         file_name: str, 
         file_ext: str, 
-        assets_dir_global: str, 
+        tileset_resource_path: str, 
         tile_size_p: int
     ) -> list:
     """Create a new tileset by preloading from tileset asset
@@ -18,9 +18,7 @@ def create(
     Returns:
         list: _description_
     """    
-    tileset: pygame.Surface = pygame.image.load(
-        "" + assets_dir_global + "/" + file_name + file_ext
-    )
+    tileset: pygame.Surface = pygame.image.load(tileset_resource_path)
 
     tileset_width_pxl = tileset.get_size()[0]
     tileset_height_pxl = tileset.get_size()[1]
