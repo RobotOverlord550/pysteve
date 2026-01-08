@@ -1,5 +1,12 @@
-import tileset, tilemap, world, directory, noise, generalmath
-import pygame, configparser, os
+import tileset
+import tilemap
+import world
+import directory
+import noise
+import generalmath
+import pygame
+import configparser
+import os
 from pathlib import Path
 from enum import Enum
 
@@ -21,19 +28,15 @@ BACKGROUND_COLOR = (135, 206, 235)
 class TileIndex(Enum):
     AIR = 0
     GRASS = 1
-    
 
 
 def create_config(config_file_path: Path):
-    """create a config file to persistently store settings in
-    """    
+    """create a config file to persistently store settings in"""
     config = configparser.ConfigParser()
-    
     config['video'] = {
         'window-height': 720,
         'window-width': 720
     }
-    
     with open(config_file_path, 'w') as configfile:
         config.write(configfile)
 
@@ -42,55 +45,55 @@ def read_config(config_file_path: Path) -> dict:
     """read the current config file
 
     Returns:
-        dict: dictionary of config values
-    """    
+        dict: dictionary of config values"""
     config = configparser.ConfigParser()
-    
     config.read(config_file_path)
-    
     window_height = config.getint('video', 'window-height')
     window_width = config.getint('video', 'window-width')
-    
     config_values = {
         'window_height': window_height,
         'window_width': window_width
     }
-    
     return config_values
-    
 
 if __name__ == "__main__":
     #___Initialization Phase___
     # initialize pygame
     pygame.init()
     print("pygame initialized")
-    
     # tileset resource path
-    tileset_resource_path = directory.resource_path(ASSETS_FOLDER_NAME + "/" + TILESET_FILE_NAME + TILESET_FILE_EXT)
-    print(f"set tileset filepath: {str(tileset_resource_path)}")
-    
+    tileset_resource_path = directory.resource_path(
+        ASSETS_FOLDER_NAME + "/" + TILESET_FILE_NAME + TILESET_FILE_EXT
+        )
+    print("set tileset filepath: " + str(tileset_resource_path))
     # config file
-    config_file_path = directory.resource_path("" + SETTINGS_FOLDER_NAME + "/" + CONFIG_FILE_NAME + CONFIG_FILE_EXTENSION)
-    
+    config_file = "" + CONFIG_FILE_NAME + CONFIG_FILE_EXTENSION
+    config_file_path = directory.resource_path(
+        "" + SETTINGS_FOLDER_NAME + "/" + config_file
+        )
     # initialize config
     config_values = read_config(config_file_path=config_file_path)
     print(config_values['window_height'])
     print(config_values['window_width'])
-    
     # tileset and tilemap setup
-    g_tileset = tileset.create(TILESET_FILE_NAME, TILESET_FILE_EXT, tileset_resource_path, TILESIZE_PX)
-    print(f"initialized tileset: {str(g_tileset)}")
+    g_tileset = tileset.create(
+        TILESET_FILE_NAME,
+        TILESET_FILE_EXT,
+        tileset_resource_path,
+        TILESIZE_PX
+        )
+    print("initialized tileset: " + str(g_tileset))
     g_tilemap = tilemap.create(
         WORLD_DIMENSIONS[0],
         WORLD_DIMENSIONS[1]
     )
-    print(f"initialized tilemap: {str(g_tilemap)}")
+    print("initialized tilemap: " + str(g_tilemap))
     tilemap.fill(g_tilemap, TileIndex.GRASS.value)
-    print(f"filled tilemap with {str(TileIndex.GRASS.value)}")
-    
-    # initialize noise with universal seed and apply noise to tilemap to create terrain
+    print("filled tilemap with " + str(TileIndex.GRASS.value))
+    # initialize noise with universal seed and apply noise to
+    # tilemap to create terrain
     simplex = noise.new_simplex(seed=42)
-    print(f"initialized simplex noise algorithm: {str(simplex)}")
+    print("initialized simplex noise algorithm: " + str(simplex))
     noise.generate_noise2(
         grid=g_tilemap,
         simplex=simplex,
@@ -102,7 +105,7 @@ if __name__ == "__main__":
         threshold=0.56,
         new_val=TileIndex.AIR.value,
     )
-    print(f"generated caves onto tilemap: {str(g_tilemap)}")
+    print("generated caves onto tilemap: " + str(g_tilemap))
     noise.generate_noise1(
         grid=g_tilemap,
         max_row=64,
@@ -116,39 +119,37 @@ if __name__ == "__main__":
         new_val=TileIndex.AIR.value
     )
     tilemap.fill_subsection(
-        tilemap=g_tilemap, 
-        subsection_tl_col=0, 
-        subsection_tl_row=0, 
-        subsection_br_col=g_tilemap.shape[0], 
-        subsection_br_row=32, 
+        tilemap=g_tilemap,
+        subsection_tl_col=0,
+        subsection_tl_row=0,
+        subsection_br_col=g_tilemap.shape[0],
+        subsection_br_row=32,
         tile_index=TileIndex.AIR.value
     )
-    
     # initialize world and draw tiles onto world
     g_world = world.create(
         tile_size=TILESIZE_PX,
         world_dimensions=WORLD_DIMENSIONS,
         initial_color=BACKGROUND_COLOR
     )
-    print(f"initialized world screen: {str(g_world)}")
+    print("initialized world screen: " + str(g_world))
     world.draw_world(
         world_surface=g_world,
         tilemap=g_tilemap,
         tileset=g_tileset,
         tile_size=TILESIZE_PX
     )
-    print(f"drew tilemap onto world: {str(g_world)}")
+    print("drew tilemap onto world: " + str(g_world))
 
     # pygame initializations
     screen = pygame.display.set_mode((
-        config_values['window_width'], 
+        config_values['window_width'],
         config_values['window_height']
     ))
-    print(f"initialized main screen: {str(screen)}")
+    print("initialized main screen: " + str(screen))
     clock = pygame.time.Clock()
-    print(f"initialized game clock as {str(clock)}")
+    print("initialized game clock as " + str(clock))
     running = True
-    
     # debug camera variables
     zoom = 1.0
     move_x = 0.0
@@ -163,7 +164,6 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 print("Quit event received")
                 running = False
-        
         # Escape
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
@@ -173,7 +173,6 @@ if __name__ == "__main__":
         # sets initial view rect size
         world_height, world_width = g_world.get_size()
         window_rect = pygame.Rect(0, 0, world_height, world_height)
-            
         # Zoom in/out
         if keys[pygame.K_z]:
             if keys[pygame.K_z and pygame.K_UP]:
@@ -205,7 +204,7 @@ if __name__ == "__main__":
         )
         move_y = generalmath.clamp(
             move_y,
-            0, 
+            0,
             g_world.get_height() - window_rect.height
         )
         window_rect.x = move_x
@@ -213,11 +212,11 @@ if __name__ == "__main__":
 
         # scale view rect to window
         pygame.transform.scale(
-            g_world.subsurface(window_rect), 
+            g_world.subsurface(window_rect),
             (
-                config_values['window_width'], 
+                config_values['window_width'],
                 config_values['window_height']
-            ), 
+            ),
             screen
         )
 

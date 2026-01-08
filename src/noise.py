@@ -9,8 +9,7 @@ def new_simplex(seed: int) -> OpenSimplex:
     Args:
         seed (int): Game Seed
     Returns:
-        OpenSimplex: Initialized noise function
-    """    
+        OpenSimplex: Initialized noise function"""
     opensimplex = OpenSimplex(seed=seed)
     return opensimplex
 
@@ -27,7 +26,8 @@ def generate_noise1(
     simplex: OpenSimplex,
     new_val: int,
 ):
-    """generates 1d noise on a 2d plane.  Values above generated noise value are replaced
+    """generates 1d noise on a 2d plane.  Values above generated noise value
+    are replaced
 
     Args:
         grid (np.ndarray): starting 2d array
@@ -39,7 +39,8 @@ def generate_noise1(
         persistance (float): persistence of noise algorithm (0-1)
         octaves (int): octaves of noise algorithm (>0)
         simplex (OpenSimplex): initialized simplex object (use new_simplex())
-        new_val (int): value to change grid cells to when the cells are greater than the threshold
+        new_val (int): value to change grid cells to when the cells are
+        greater than the threshold
     """
     # set variables with parameters
     f = frequency
@@ -48,7 +49,6 @@ def generate_noise1(
     height, width = grid.shape
     height = generalmath.clamp(height, 0, max_row - min_row)
     noise_arr = np.zeros(width)
-    
     # runs noise algorithm for set number of Octaves
     for _ in range(octaves):
         max_value += amplitude
@@ -60,8 +60,8 @@ def generate_noise1(
         )
         f *= lacunarity
         a *= persistence
-    
-    # normalize calculated values and set values in grid that are above the threshold to the new value
+    # normalize calculated values and set values in grid that are above the
+    # threshold to the new value
     for row in range(height):
         for col in range(width):
             norm_value = (noise_arr[col] + max_value) / (2 * max_value)
@@ -82,12 +82,10 @@ def _noise1_add_octave(
         frequency (float): frequency of octave
         amplitude (float): amplitude of octave
         start_arr (np.ndarray): array to apply octave too
-        simplex (OpenSimplex): initialized simplex object to use
-    """    
+        simplex (OpenSimplex): initialized simplex object to use"""
     noise_arr = start_arr
     f = frequency
     a = amplitude
-    
     for col in range(noise_arr.size):
         noise_value = simplex.noise2(x=col * f, y=0)
         noise_arr[col] += noise_value * a
@@ -101,7 +99,7 @@ def generate_noise2(
     persistance: float,
     octaves: int,
     simplex: OpenSimplex,
-    new_val: int, 
+    new_val: int,
     threshold: float
 ):
     """applies noise algorithm to 2d integer array
@@ -114,16 +112,16 @@ def generate_noise2(
         persistance (float): persistence of noise algorithm (0-1)
         octaves (int): octaves of noise algorithm (>0)
         simplex (OpenSimplex): initialized simplex object (use new_simplex())
-        new_val (int): value to change grid cells to when the cells are greater than the threshold
+        new_val (int): value to change grid cells to when the cells are
+        greater than the threshold
         threshold (float): threshold for determining what cells are changed
     """
-    # set initial variables   
+    # set initial variables
     f = frequency
     a = amplitude
     max_value = 0.0
     height, width = grid.shape
     noise_arr = np.zeros((height, width))
-    
     # runs noise algorithm for set number of Octaves
     for _ in range(octaves):
         max_value += a
@@ -135,16 +133,16 @@ def generate_noise2(
         )
         f *= lacunarity
         a *= persistance
-        print(f"octave {_ + 1} complete")
-    
-    # normalize calculated values and set values in grid that are above the threshold to the new value
+        print("octave " + str((_ + 1)) + " complete")
+    # normalize calculated values and set values in grid that are above the
+    # threshold to the new value
     for row in range(height):
         for col in range(width):
             norm_value = (noise_arr[row, col] + max_value) / (2 * max_value)
             if norm_value > threshold:
                 grid[row, col] = new_val
-            
-            
+
+
 def _noise2_add_octave(
     frequency: float,
     amplitude: float,
@@ -163,7 +161,6 @@ def _noise2_add_octave(
     noise_arr = start_arr
     f = frequency
     a = amplitude
-    
     # apply noise to all grid cells
     for y in range(noise_arr.shape[0]):
         for x in range(noise_arr.shape[1]):

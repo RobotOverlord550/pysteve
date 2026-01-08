@@ -7,6 +7,5 @@ def clamp(x, minimum, maximum):
         maximum (_type_): maximum value
 
     Returns:
-        _type_: augmented value
-    """    
+        _type_: augmented value"""
     return max(minimum, min(x, maximum))

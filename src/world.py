@@ -7,15 +7,14 @@ def draw_world(
     tilemap: np.ndarray,
     tileset: list,
     tile_size: int,
-): 
+):
     """draws world based on tilemap
 
     Args:
         world_surface (pygame.Surface): initialized world surface
         tilemap (np.ndarray): tilemap to reference
         tileset (list): tileset to reference
-        tile_size (int): tile size in pixels
-    """    
+        tile_size (int): tile size in pixels"""
     height = tilemap.shape[0]
     width = tilemap.shape[1]
     for y in range(height):
@@ -47,15 +46,14 @@ def _draw_tile(
         tile_index (int): tile index to use
         tile_size (int): tile size in pixels
         row (int): row to use
-        col (int): collumn
-    """    
+        col (int): collumn"""
     world_surface.blit(
         tileset[tile_index],
         pygame.Rect(
-                row * tile_size, 
-                col * tile_size, 
-                tile_size, 
-                tile_size
+            row * tile_size,
+            col * tile_size,
+            tile_size,
+            tile_size
         ),
     )
     return world_surface
@@ -65,7 +63,7 @@ def create(
         tile_size: int, 
         world_dimensions: tuple[int, int],
         initial_color: tuple,
-    ) -> pygame.Surface:
+) -> pygame.Surface:
     """create new world surface to draw objects on
 
     Args:
@@ -74,10 +72,9 @@ def create(
         initial_color (tuple): background color
 
     Returns:
-        pygame.Surface: initialized world represented as a Pygame Surface
-    """    
+        pygame.Surface: initialized world represented as a Pygame Surface"""
     width = world_dimensions[1] * tile_size
     height = world_dimensions[0] * tile_size
-    world: pygame.Surface = pygame.Surface((width, height))
+    world = pygame.Surface((width, height))
     world.fill(color=initial_color)
     return world
